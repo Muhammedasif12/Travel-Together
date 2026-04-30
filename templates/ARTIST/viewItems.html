@@ -1,0 +1,142 @@
+{% extends 'ARTIST/artistBase.html' %}
+{% block header %}
+
+<!-- Alert message -->
+{% if messages %}
+{% for i in messages %}
+<script>
+    alert("{{i}}");
+</script>
+{% endfor %}
+{% endif %}
+<!-- Alert Message End -->
+
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 95%;
+        margin: 10px;
+    }
+
+    td,
+    th {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 8px;
+        color: black;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+
+    #img {
+        width: 90px;
+        height: 90px;
+        transition: transform .2s;
+        /* Animation */
+    }
+
+    #img:hover {
+        transform: scale(1.5);
+    }
+</style>
+
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('../static/images/youn.jpg');"
+    data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate mb-5 text-center">
+                <p class="breadcrumbs mb-0"><span class="mr-2"><a href="/artistHome">Home <i
+                                class="fa fa-chevron-right"></i></a></span> <span>Packages<i
+                            class="fa fa-chevron-right"></i></span></p>
+                <h2 class="mb-0 bread">Packages</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<center>
+    {% if items %}
+    <h1 class="m-3 bread">My Packages</h1>
+    <input type="text" class="form-control" id="searchInput" style="width: 95%;" placeholder="Search...">
+    <table id="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Days</th>
+                <th>Seats</th>
+                <th>Image</th>
+                <th>Description</th>
+                <th>Trip Date</th>
+                <th>Uploaded Date</th>
+                <th style="text-align: center;">Action</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            {% for i in items %}
+            <tr id="row{{ forloop.counter }}">
+                <td>{{i.name}}</td>
+                <td>{{i.category}}</td>
+                <td>{{i.price}}</td>
+                <td>{{i.color}}</td>
+                <td>{{i.qty}}</td>
+                <td><img src="/media/{{i.image}}" style="border-radius: 8px;" id="img" alt=""></td>
+                <td>{{i.desc}}</td>
+                <td>{{i.tripday}}</td>
+                <td>{{i.uploaded}}</td>
+                <td style="text-align: center;">
+                    <div style="display: flex; flex-wrap: nowrap;">
+                        <a href="/updateProduct?id={{i.id}}"
+                            class="btn btn-outline-success">Update</a>
+                        <a href="/deleteProduct?id={{i.id}}"
+                            class="btn btn-outline-danger ml-2">Delete</a>
+                       <a href="/coordinatorCancelTrip/?id={{i.id}}"
+                           class="btn btn-danger btn-sm mt-1"
+                         style="width:100%;">🚫 Cancel Trip</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="noMatchingData" style="display: none;">
+        <h1 class="m-5">No Results Found</h1>
+    </div>
+    {% else %}
+    <h1 class="m-3">No Products Found</h1>
+    {% endif %}
+</center>
+
+<!-- Include Bootstrap JS and jQuery -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Handle search input
+        $("#searchInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            var rows = $("#tableBody tr");
+            var matchingRows = rows.filter(function () {
+                var rowText = $(this).text().toLowerCase();
+                return rowText.indexOf(value) > -1;
+            });
+            rows.hide(); // Hide all rows initially
+            matchingRows.show(); // Show matching rows
+            if (matchingRows.length === 0) {
+                $("#noMatchingData").show(); // Show message if no matching rows
+                $("#table").hide();
+            } else {
+                $("#noMatchingData").hide(); // Hide message if there are matching rows
+                $("#table").show();
+            }
+        });
+    });
+</script>
+
+{% endblock %}

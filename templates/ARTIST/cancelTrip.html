@@ -1,0 +1,49 @@
+{% extends 'ARTIST/artistBase.html' %}
+{% block header %}
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('../static/images/bg_2.jpg');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate mb-5 text-center">
+                <h2 class="mb-0 bread">Cancel Trip</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section bg-light">
+    <div class="container" style="max-width:620px;">
+        <div style="background:white; padding:30px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+            <div style="text-align:center; margin-bottom:20px;">
+                <img src="/media/{{ package.image }}" style="width:180px; height:120px; object-fit:cover; border-radius:8px;">
+                <h4 style="margin-top:10px;">{{ package.name }}</h4>
+                <p style="color:gray;">{{ package.category }} | Trip Date: {{ package.tripday }}</p>
+            </div>
+
+            <div style="background:#f8d7da; border:1px solid #f5c6cb; padding:15px; border-radius:8px; margin-bottom:20px;">
+                ❗ <strong>You are about to cancel this entire trip.</strong>
+                <p style="margin-top:8px;">
+                    This trip has <strong>{{ booked_count }} booked member(s)</strong>. 
+                    All of them will be notified about the cancellation and will receive a refund notification.
+                </p>
+            </div>
+
+            <form method="POST" action="/coordinatorCancelTrip/">
+                {% csrf_token %}
+                <input type="hidden" name="package_id" value="{{ package.id }}">
+                <div class="form-group">
+                    <label><strong>Reason for Cancellation</strong></label>
+                    <textarea name="reason" class="form-control" rows="4" placeholder="Please provide the reason for cancelling this trip..." required></textarea>
+                </div>
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button type="submit" class="btn btn-danger btn-block">🚫 Cancel This Trip</button>
+                    <a href="/viewItems/" class="btn btn-secondary btn-block">Go Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

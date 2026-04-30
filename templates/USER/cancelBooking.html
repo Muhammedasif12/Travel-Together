@@ -1,0 +1,52 @@
+{% extends 'USER/userBase.html' %}
+{% block header %}
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('../static/images/bg_2.jpg');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate mb-5 text-center">
+                <h2 class="mb-0 bread">Cancel Booking</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section bg-light">
+    <div class="container" style="max-width:600px;">
+        <div style="background:white; padding:30px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+            
+            <div style="text-align:center; margin-bottom:20px;">
+                <img src="/media/{{ cart.pid.image }}" style="width:150px; height:100px; object-fit:cover; border-radius:8px;">
+                <h4 style="margin-top:10px;">{{ cart.pid.name }}</h4>
+                <p style="color:gray;">Price: ₹{{ cart.price }} | Qty: {{ cart.quantity }}</p>
+            </div>
+
+            <div style="background:#fff3cd; border:1px solid #ffc107; padding:15px; border-radius:8px; margin-bottom:20px;">
+                ⚠️ <strong>Are you sure you want to cancel this booking?</strong>
+                {% if cart.completedpay == 1 %}
+                <p style="margin-top:5px; color:green;">✅ You will receive a <strong>Full Refund</strong> within 5-7 business days.</p>
+                {% elif cart.status == "Paid" %}
+                <p style="margin-top:5px; color:orange;">⚠️ You will receive a <strong>Partial Refund</strong> within 5-7 business days.</p>
+                {% else %}
+                <p style="margin-top:5px; color:gray;">No payment made — no refund needed.</p>
+                {% endif %}
+            </div>
+
+            <form method="POST" action="/cancelBooking/">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ cart.id }}">
+                <div class="form-group">
+                    <label><strong>Reason for Cancellation</strong></label>
+                    <textarea name="reason" class="form-control" rows="4" placeholder="Please tell us why you are cancelling..." required></textarea>
+                </div>
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button type="submit" class="btn btn-danger btn-block">❌ Confirm Cancellation</button>
+                    <a href="/viewOrders/" class="btn btn-secondary btn-block">Go Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends 'USER/userBase.html' %}
+{% block header %}
+
+<!-- Alert message -->
+{% if messages %}
+{% for i in messages %}
+<script>
+    alert("{{i}}");
+</script>
+{% endfor %}
+{% endif %}
+<!-- Alert Message End -->
+
+<style>
+    #custom-width {
+        width: 100px;
+        text-align: center;
+    }
+</style>
+
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('../static/images/bg_2.jpg');"
+    data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate mb-5 text-center">
+                <p class="breadcrumbs mb-0"><span class="mr-2"><a href="/userHome">Home <i
+                                class="fa fa-chevron-right"></i></a></span> <span>Packages<i
+                            class="fa fa-chevron-right"></i></span></p>
+                <h2 class="mb-0 bread">Packages</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="ftco-section">
+    <div class="col-md-12 mb-5">
+        <div class="search-box">
+            <center> <input type="text" class="form-control" id="searchInput" style="width: 85%;"
+                    placeholder="Search...">
+            </center>
+        </div>
+    </div>
+    <div class="container-lg">
+        <div class="row">
+            {% for i in productData %}
+            <div class="container"  >
+                <div class="product ftco-animate">
+                    <div class="img d-flex align-items-center justify-content-center"
+                        style="background-image: url('/media/{{i.image}}');"
+                        <div class="desc">
+                            {% if i.qty > 0 %}
+                            {% if wishListData %}
+                            <p class="meta-prod d-flex">
+                                {% if i.id in wishListData %}
+                                <a href="/removeFromWishList?id={{i.id}}"
+                                class="d-flex align-items-center justify-content-center"><img
+                                src="/static/images/heart.png" alt=""></a>
+                                {% else %}
+                                <a href="/addToWishList?id={{i.id}}"
+                                class="d-flex align-items-center justify-content-center"><span
+                                class="flaticon-heart"></span></a>
+                                {% endif %}
+                            </p>
+                            {% else %}
+                            <p class="meta-prod d-flex">
+                                <a href="/addToWishList?id={{i.id}}"
+                                class="d-flex align-items-center justify-content-center"><span
+                                class="flaticon-heart"></span></a>
+                            </p>
+                            {% endif %}
+                            {% else %}
+                            <h3 class="text-danger">OUT OF SEAT</h3>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="text text-left">
+                        <span class="sale">Book Now</span>
+                        <span class="category">{{i.category}}</span>
+                        <h2>{{i.name}} on {{ i.tripday }}</h2>
+                        <h6>Updloaded Date : {{i.uploaded }}</h6>
+                        <h4 style="font-size: 18px;font-weight: bold;" >{{i.desc}}</h4>
+                        <a name="cname" href="/viewcprofile?cid={{ i.artistId.id }}">{{ i.artistId }}</a>
+                        
+                        <p class="mb-0"><span class="price">&#x20B9; {{i.price}}</span></p>
+                        <h4 style="font-size: 18px;font-weight: bold;" >{{i.qty}}  Seats Left</h4>
+                        <form action="/addToCart/" method="post">
+                            {% csrf_token %}
+                            <input type="number" max="{{i.qty}}" min="1" value="1" id="custom-width"
+                            class="border mb-2 text-center" placeholder="Enter Quantity" name="qty" required><br>
+                            <input type="hidden" value="{{i.id}}" name="pid">
+                            <input type="hidden" value="{{i.price}}" name="price">
+                            <input type="submit" class="btn btn-primary" value="Book Now">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <center>
+            <div id="noMatchingData" style="display: none;">
+                <h1 class="m-5">No Results Found</h1>
+            </div>
+        </center>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#searchInput').on('input', function () {
+            var searchQuery = $(this).val().toLowerCase();
+            filterProducts(searchQuery);
+        });
+    });
+
+    function filterProducts(query) {
+        $('.product').each(function () {
+            var productText = $(this).text().toLowerCase();
+            if (productText.includes(query)) {
+                $(this).show();
+                $("#noMatchingData").hide();
+            } else {
+                $("#noMatchingData").show();
+                $(this).hide();
+            }
+        });
+    }
+</script>
+
+{% endblock %}

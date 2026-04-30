@@ -1,0 +1,122 @@
+{% extends 'ADMIN/adminBase.html' %}
+{% block header %}
+
+{% if messages %}
+{% for i in messages %}
+<script>
+    alert("{{ i }}");
+</script>
+{% endfor %}
+{% endif %}
+
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        margin: 8px;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 8px;
+        color: black;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+
+    #img {
+        width: 90px;
+        height: 90px;
+        transition: transform .2s;
+    }
+
+    #img:hover {
+        transform: scale(1.5);
+    }
+</style>
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('../static/images/bg_2.jpg');"
+    data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate mb-5 text-center">
+                <p class="breadcrumbs mb-0">
+                    <span class="mr-2"><a href="/adminHome">Home <i class="fa fa-chevron-right"></i></a></span>
+                    <span>Users <i class="fa fa-chevron-right"></i></span>
+                </p>
+                <h2 class="mb-0 bread">Registered Users</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<center>
+    {% if data %}
+    <h1 class="m-3 bread">All Users</h1>
+    <input type="text" class="form-control" id="searchInput" style="width: 100%; margin: 8px;" placeholder="Search...">
+    <table id="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            {% for i in data %}
+            <tr id="row{{ forloop.counter }}">
+                <td>{{ i.name }}</td>
+                <td>{{ i.email }}</td>
+                <td>{{ i.phone }}</td>
+                <td>{{ i.address }}</td>
+                <td style="text-align: center;">
+                    <a href="/manageUser/?id={{ i.loginid_id }}&status=Delete"
+                     class="btn btn-outline-danger"
+                     onclick="return confirm('Delete this user?')">
+                     Delete
+                     </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="noMatchingData" style="display: none;">
+        <h1 class="m-5">No Results Found</h1>
+    </div>
+    {% else %}
+    <h1 class="m-3">No Users Found</h1>
+    {% endif %}
+</center>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+    $("#searchInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        var rows = $("#tableBody tr");
+        var matchingRows = rows.filter(function () {
+            var rowText = $(this).text().toLowerCase();
+            return rowText.indexOf(value) > -1;
+        });
+        rows.hide();
+        matchingRows.show();
+        if (matchingRows.length === 0) {
+            $("#noMatchingData").show();
+            $("#table").hide();
+        } else {
+            $("#noMatchingData").hide();
+            $("#table").show();
+        }
+    });
+});
+</script>
+
+{% endblock %}

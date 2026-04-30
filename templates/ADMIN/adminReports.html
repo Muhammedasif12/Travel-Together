@@ -1,0 +1,294 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reports & Analytics</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .stat-card h2 {
+            font-size: 40px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .stat-card p {
+            color: gray;
+            margin: 0;
+        }
+        .card-blue { border-top: 4px solid #007bff; }
+        .card-green { border-top: 4px solid #28a745; }
+        .card-orange { border-top: 4px solid #fd7e14; }
+        .card-red { border-top: 4px solid #dc3545; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="/adminHome">Travel Together</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a href="/adminHome" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="/adminReports" class="nav-link">Reports</a></li>
+                <li class="nav-item"><a href="/logout" class="nav-link logout-btn">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="ftco-section">
+    <div class="container">
+        <h2 style="margin-bottom:30px;">📊 Reports & Analytics</h2>
+
+        <!-- Stats Cards -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="stat-card card-blue">
+                    <h2>{{ total_users }}</h2>
+                    <p>👤 Total Users</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card card-green">
+                    <h2>{{ total_coordinators }}</h2>
+                    <p>🎯 Total Coordinators</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card card-orange">
+                    <h2>{{ total_bookings }}</h2>
+                    <p>🎫 Total Bookings</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card card-red">
+                    <h2>₹{{ total_revenue }}</h2>
+                    <p>💰 Total Revenue</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card" style="border-top:4px solid #6f42c1;">
+                    <h2>{{ total_cancelled }}</h2>
+                    <p>❌ Cancelled Bookings</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- All Bookings -->
+        <h3 style="margin-top:30px; margin-bottom:15px;">📋 All Paid Bookings</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr style="background:#343a40; color:white;">
+                    <th>User</th>
+                    <th>Package</th>
+                    <th>Coordinator</th>
+                    <th>Price</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Proof</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in all_bookings %}
+                <tr>
+                    <td>{{ i.uid.name }}</td>
+                    <td>{{ i.pid.name }}</td>
+                    <td><strong style="color:#007bff;">👤 {{ i.pid.artistId.name }}</strong></td>
+                    <td>₹{{ i.price }}</td>
+                    <td>{{ i.date }}</td>
+                    <td>
+                        {% if i.completedpay == 1 %}
+                        <span style="color:green;">✅ Completed</span>
+                        {% else %}
+                        <span style="color:orange;">⏳ Partial</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if i.proof %}
+                        <img src="{{ i.proof.url }}" style="width:100px; cursor:pointer;" onclick="openModal(this.src)" alt="Proof image">
+                        {% else %}
+                        No Proof
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" style="text-align:center;">No bookings yet</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Popular Trips -->
+        <h3 style="margin-top:30px; margin-bottom:15px;">🔥 Popular Packages</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr style="background:#343a40; color:white;">
+                    <th>Package</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Trip Date</th>
+                    <th>Coordinator</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in popular_trips %}
+                <tr>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.category }}</td>
+                    <td>₹{{ i.price }}</td>
+                    <td>{{ i.tripday }}</td>
+                    <td>{{ i.artistId.name }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" style="text-align:center;">No packages yet</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Recent Feedbacks -->
+        <h3 style="margin-top:30px; margin-bottom:15px;">⭐ Recent Feedbacks</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr style="background:#343a40; color:white;">
+                    <th>User</th>
+                    <th>Package</th>
+                    <th>Rating</th>
+                    <th>Review</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in feedbacks %}
+                <tr>
+                    <td>{{ i.uid.name }}</td>
+                    <td>{{ i.oid.pid.name }}</td>
+                    <td>⭐ {{ i.rating }}/5</td>
+                    <td>{{ i.review }}</td>
+                    <td>{{ i.date }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" style="text-align:center;">No feedbacks yet</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Cancelled Bookings -->
+        <h3 style="margin-top:30px; margin-bottom:15px; color:red;">❌ Cancelled Bookings</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr style="background:#343a40; color:white;">
+                      <th>User</th>
+                      <th>Package</th>
+                      <th>Coordinator</th>
+                      <th>Price</th>
+                      <th>Cancelled Date</th>
+                      <th>Cancelled By</th>
+                     <th>Reason</th>
+                     <th>Payment Status</th>
+                     <th>Refund Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in cancelled_bookings %}
+<tr>
+    <td>{{ i.uid.name }}</td>
+    <td>{{ i.pid.name }}</td>
+    <td>{{ i.pid.artistId.name }}</td>
+    <td>₹{{ i.price }}</td>
+    <td>{{ i.date }}</td>
+    <td>
+        {% if i.cancelled_by %}
+        {% if "Coordinator" in i.cancelled_by %}
+        <span style="color:red; font-weight:bold;">🎯 {{ i.cancelled_by }}</span>
+        {% else %}
+        <span style="color:orange; font-weight:bold;">👤 {{ i.cancelled_by }}</span>
+        {% endif %}
+        {% else %}
+        <span style="color:gray;">—</span>
+        {% endif %}
+    </td>
+    <td style="font-size:12px; color:#555;">
+        {% if i.cancellation_reason %}
+        {{ i.cancellation_reason }}
+        {% else %}
+        No reason provided
+        {% endif %}
+    </td>
+    <td>
+        {% if i.completedpay == 1 %}
+        <span style="color:green;">✅ Fully Paid</span>
+        {% elif i.status == "Paid" %}
+        <span style="color:orange;">⚠️ Partially Paid</span>
+        {% else %}
+        <span style="color:gray;">No Payment</span>
+        {% endif %}
+    </td>
+    <td>
+        {% if i.completedpay == 1 %}
+        <span style="color:green;">Full Refund Pending</span>
+        {% elif i.status == "Paid" %}
+        <span style="color:orange;">Partial Refund Pending</span>
+        {% else %}
+        <span style="color:gray;">No Refund Needed</span>
+        {% endif %}
+    </td>
+ </tr>
+         {% empty %}
+            <tr><td colspan="9" style="text-align:center;">No cancelled bookings yet</td></tr>
+         {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Image Modal for Proof Zoom -->
+        <div id="imageModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.9);" onclick="closeModal()">
+            <span onclick="closeModal()" 
+                style="position:absolute; top:20px; right:40px; color:white; font-size:40px; cursor:pointer;">
+                &times;
+            </span>
+            <img id="modalImage" 
+                style="display:block; margin:auto; max-width:80%; max-height:80%; margin-top:50px;" onclick="event.stopPropagation()" alt="Proof image">
+        </div>
+
+    </div>
+</section>
+
+<script>
+function openModal(src) {
+    document.getElementById("imageModal").style.display = "block";
+    document.getElementById("modalImage").src = src;
+}
+
+function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+}
+</script>
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const logoutLinks = document.querySelectorAll(".logout-btn");
+
+            logoutLinks.forEach(link => {
+         link.addEventListener("click", function (e) {
+        const confirmLogout = confirm("Are you sure you want to logout?");
+        if (!confirmLogout) {
+        e.preventDefault();
+            }
+                  });
+            });
+         });
+    </script>
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

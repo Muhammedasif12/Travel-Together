@@ -1,0 +1,120 @@
+{% extends 'ARTIST/artistBase.html' %}
+{% block header %}
+
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('../static/images/youn.jpg');"
+    data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate mb-5 text-center">
+                <p class="breadcrumbs mb-0"><span class="mr-2"><a href="/artistHome">Home <i
+                                class="fa fa-chevron-right"></i></a></span> <span>Update Package<i
+                            class="fa fa-chevron-right"></i></span></p>
+                <h2 class="mb-0 bread">Update Package</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section bg-light">
+    <div class="container" style="margin: 0 25%;">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="wrapper px-md-4">
+                    <div class="row no-gutters">
+                        <div class="col-md-7">
+                            <div class="contact-wrap w-100 p-md-5 p-4">
+                                <h3 class="mb-4">Update Package</h3>
+                                <form method="POST" id="contactForm" name="contactForm" class="contactForm"
+                                    enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="email">Package Name</label>
+                                                <input type="text" class="form-control" value="{{pdtData.name}}"
+                                                    pattern="[a-z A-Z]+" name="pdtname" id="email" required
+                                                    placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="email">Category</label>
+                                                <select name="category" id="" class="form-control" required>
+                                                    <option selected value="{{pdtData.category}}">{{pdtData.category}}
+                                                    </option>
+                                                    {% for option in category %}
+                                                    {% if option != pdtData.category %}
+                                                    <option value="{{option}}">{{option}}</option>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="email">Price</label>
+                                                <input type="text" class="form-control" pattern="[0-9]+" name="price"
+                                                    id="email" value="{{pdtData.price}}" placeholder="Price" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="name">Days</label>
+                                                <input type="text" value="{{pdtData.color}}" class="form-control"
+                                                    name="color" id="name" placeholder="Days" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="qty">Seats</label>
+                                                <input type="text" value="{{pdtData.qty}}" class="form-control"
+                                                    pattern="[0-9]+" name="qty" id="qty" placeholder="Seats"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="qty">Trip Date</label>
+                                                <input type="date" value="{{pdtData.tripday}}" class="form-control"
+                                                pattern="\d{1,2}/\d{1,2}/\d{4}" class="datepicker" name="tripdate" id="tripdate" 
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="name">Image</label>
+                                                <input type="file" class="form-control" name="image" id="name" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="label" for="message">Description</label>
+                                                <textarea name="desc" class="form-control" id="message" cols="30"
+                                                    rows="4" placeholder="Description"
+                                                    required>{{pdtData.desc}}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="submit" value="Update" class="btn btn-primary">
+                                                <div class="submitting"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-5 order-md-first d-flex align-items-stretch">
+                            <div id="map" class="map"></div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

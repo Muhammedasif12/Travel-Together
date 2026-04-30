@@ -1,0 +1,122 @@
+{% extends 'USER/userBase.html' %}
+{% block header %}
+
+<style>
+.ftco-section .container {
+    max-width: 700px !important;
+}
+</style>
+
+<style>
+.profile-box {
+    max-width: 500px;
+    margin: -80px auto 40px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.profile-box h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-box input,
+.profile-box textarea,
+.profile-box select {
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.profile-box button {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.profile-details {
+    margin-top: 20px;
+}
+
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-row span {
+    color: #777;
+    font-size: 14px;
+}
+
+.profile-row strong {
+    color: #000;
+    font-size: 15px;
+    text-align: right;
+    max-width: 60%;
+    word-break: break-word;
+}
+</style>
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('../static/images/bg_2.jpg');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate mb-5 text-center">
+                <h2 class="mb-0 bread">My Profile</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section bg-light">
+
+    {% if messages %}
+    {% for i in messages %}
+    <div style="max-width:500px; margin:10px auto; background:#d4edda; border:1px solid #c3e6cb; padding:10px; border-radius:5px;">
+        {{ i }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="profile-box">
+
+        <div style="text-align:center; margin-bottom:20px;">
+            <img src="/static/images/profile.png" style="width:100px; height:100px; border-radius:50%;">
+            <h3 style="margin-top:10px;">{{ user.name }}</h3>
+        </div>
+
+      <div class="profile-details">
+
+    <div class="profile-row">
+        <span>Full Name</span>
+        <strong>{{ user.name }}</strong>
+    </div>
+
+    <div class="profile-row">
+        <span>Email</span>
+        <strong>{{ user.email }}</strong>
+    </div>
+
+    <div class="profile-row">
+        <span>Phone</span>
+        <strong>{{ user.phone }}</strong>
+    </div>
+
+    <div class="profile-row">
+        <span>Address</span>
+        <strong>{{ user.address }}</strong>
+    </div>
+
+</div>
+
+        <div style="text-align:center; margin-top:20px;">
+            <a href="/updateUserProfilePage/" class="btn btn-primary">✏️ Update Profile</a>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

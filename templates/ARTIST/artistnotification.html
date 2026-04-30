@@ -1,0 +1,49 @@
+{% extends 'ARTIST/artistBase.html' %}
+{% block header %}
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('../static/images/bg_2.jpg');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate mb-5 text-center">
+                <h2 class="mb-0 bread">🔔 Notifications</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section">
+    <div class="container">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h4>Your Notifications</h4>
+            {% if notifs %}
+            <a href="/clearArtistNotifications/"
+               style="background:red; color:white; padding:8px 16px; border-radius:5px; text-decoration:none;">
+               🗑️ Clear All
+            </a>
+            {% endif %}
+        </div>
+
+        {% for i in notifs %}
+        <div style="background:{% if i.is_read %}#f9f9f9{% else %}#fff3cd{% endif %};
+                    border-left: 4px solid {% if i.is_read %}#ccc{% else %}#ffc107{% endif %};
+                    padding: 15px; margin-bottom: 10px; border-radius: 5px;
+                    display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                {% if not i.is_read %}
+                <span style="background:red; color:white; border-radius:50%; padding:2px 8px; font-size:11px; margin-right:8px;">NEW</span>
+                {% endif %}
+                <span>{{ i.message }}</span>
+                <br>
+                <small style="color:gray;">{{ i.created_at }}</small>
+            </div>
+        </div>
+        {% empty %}
+        <div style="text-align:center; margin-top:50px;">
+            <h4 style="color:gray;">No notifications yet! 🎉</h4>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends 'COMMON/commonBase.html' %}
+{% block header %}
+
+<style>
+    #mySelect {
+        width: 100%;
+        background: #fff;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 14px;
+        border-radius: 2px;
+        box-shadow: none !important;
+    }
+</style>
+
+
+<div>
+    {% for i in skill %}
+    {{i}}
+    {% endfor %}
+</div>
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('../static/images/backpacker.jpg');"
+    data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate mb-5 text-center">
+                <p class="breadcrumbs mb-0"><span class="mr-2"><a href="/">Home <i
+                                class="fa fa-chevron-right"></i></a></span> <span>Sign Up <i
+                            class="fa fa-chevron-right"></i></span></p>
+                <h2 class="mb-0 bread">Register Now</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section bg-light">
+    <div class="container" style="margin: 0 25%;">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="wrapper px-md-4">
+                    <div class="row no-gutters">
+                        <div class="col-md-7">
+                            <div class="contact-wrap w-100 p-md-5 p-4">
+                                <h3 class="mb-4">Sign Up</h3>
+                                <form method="POST" id="contactForm" name="contactForm" class="contactForm" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="email">Coordinator Name</label>
+                                                <input type="text" class="form-control" name="name" id="email"
+                                                    placeholder="Name" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="email">Email Address</label>
+                                                <input type="email" class="form-control"
+                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email"
+                                                    id="email" placeholder="Email" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="email">Phone</label>
+                                                <input type="text" class="form-control" pattern="[6789][0-9]+"
+                                                    maxlength="10" minlength="10" name="phone" id="email"
+                                                    placeholder="Phone" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="name">Password</label>
+                                                <input type="password" minlength="8"  class="form-control" name="password" id="name"
+                                                    placeholder="Password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$" title="Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long." required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="label" for="name">Types of Packages</label>
+                                                <select data-placeholder="Begin typing a name to filter..." multiple
+                                                    class="chosen-select" name="skills" id="mySelect" required>
+                                                    <option value=""></option>
+                                                    <option>Independent tour</option>
+                                                    <option>Escorted tour</option>
+                                                    <option>Incentive tour</option>
+                                                    <option>Hosted tour</option>
+                                                    <option>Freedom tour</option>
+                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="label" for="message">Proofs</label>
+                                                <input class="form-control" name="image" type="file"
+                                                    id="formFileMultiple" accept="image/*" multiple required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="label" for="message">Address</label>
+                                                <textarea name="address" class="form-control" id="message" cols="30"
+                                                    rows="4" placeholder="Address" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="submit" value="Sign Up" class="btn btn-primary">
+                                                <div class="submitting"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-5 order-md-first d-flex align-items-stretch">
+                            <div id="map" class="map"></div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+
+<script>
+    $(".chosen-select").chosen({
+        no_results_text: "Oops, nothing found!"
+    });
+
+    $(function () {
+        $("input[type='submit']").click(function (event) {
+            var $fileUpload = $("input[type='file']");
+            if (parseInt($fileUpload.get(0).files.length) > 3) {
+                alert("You can only upload a maximum of 2 files");
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    });
+</script>
+<script>
+    function validatePassword() {
+        var password = document.getElementById('password').value;
+        var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+
+        if (!regex.test(password)) {
+            alert('Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long.');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+{% endblock %}
